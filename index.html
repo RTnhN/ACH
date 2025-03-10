@@ -6,15 +6,14 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      display: flex
+      display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-
     }
     h1 {
-        margin-bottom: 20px;
-        text-align: center;
+      margin-bottom: 20px;
+      text-align: center;
     }
     label {
       display: block;
@@ -30,20 +29,16 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-
     }
-
     #smallRoomInputs label {
       margin-top: 5px;
     }
-
     #smallRoomInputs {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
-
     #content {
       margin: auto;
       width: min(400px, 90%);
@@ -56,74 +51,73 @@
   </style>
 </head>
 <body>
-<div id="content">
-  <h1>Clean Room ACH Calculator</h1>
-  
-  <div class="section">
-    <h2>Large Clean Room</h2>
-
-    <p>Either enter the dimensions of the large clean room to calculate the volume automatically or the volume (m³) directly.</p>
-    <label for="lengthLarge">Length (m):</label>
-    <input type="number" id="lengthLarge" step="any" oninput="updateVolumeLarge()">
+  <div id="content">
+    <h1>Clean Room ACH Calculator</h1>
     
-    <label for="widthLarge">Width (m):</label>
-    <input type="number" id="widthLarge" step="any" oninput="updateVolumeLarge()">
+    <div class="section">
+      <h2>Large Clean Room</h2>
+      <p>Either enter the dimensions of the large clean room to calculate the volume automatically or the volume (m³) directly.</p>
+      <label for="lengthLarge">Length (m):</label>
+      <input type="number" id="lengthLarge" step="any" oninput="updateVolumeLarge()">
+      
+      <label for="widthLarge">Width (m):</label>
+      <input type="number" id="widthLarge" step="any" oninput="updateVolumeLarge()">
+      
+      <label for="heightLarge">Height (m):</label>
+      <input type="number" id="heightLarge" step="any" oninput="updateVolumeLarge()">
+      
+      <label for="volLarge">Volume (m³):</label>
+      <input type="number" id="volLarge" step="any">
+      
+      <label for="windLarge">Windspeed (m/s):</label>
+      <input type="number" id="windLarge" step="any">
+      
+      <label for="ffuLarge">Number of FFUs:</label>
+      <input type="number" id="ffuLarge" step="1">
+    </div>
     
-    <label for="heightLarge">Height (m):</label>
-    <input type="number" id="heightLarge" step="any" oninput="updateVolumeLarge()">
+    <div class="section">
+      <h2>Small Clean Room(s)</h2>
+      <p>Either enter the dimensions of the small clean rooms to calculate the volume automatically or the volume (m³) directly.</p>
+      <label for="lengthSmall">Length (m):</label>
+      <input type="number" id="lengthSmall" step="any" oninput="updateVolumeSmall()">
+      
+      <label for="widthSmall">Width (m):</label>
+      <input type="number" id="widthSmall" step="any" oninput="updateVolumeSmall()">
+      
+      <label for="heightSmall">Height (m):</label>
+      <input type="number" id="heightSmall" step="any" oninput="updateVolumeSmall()">
+      
+      <label for="volSmall">Volume (m³) per small room:</label>
+      <input type="number" id="volSmall" step="any">
+      
+      <label for="ffuSmall">Number of FFUs (per small room):</label>
+      <input type="number" id="ffuSmall" step="1">
+      
+      <label for="numSmallRooms">Number of Small Clean Rooms:</label>
+      <input type="number" id="numSmallRooms" step="1" value="1">
+      
+      <!-- Dynamic windspeed inputs for each small room will appear here -->
+      <div id="smallRoomInputs"></div>
+    </div>
     
-    <label for="volLarge">Volume (m³):</label>
-    <input type="number" id="volLarge" step="any">
-
-    <label for="windLarge">Windspeed (m/s):</label>
-    <input type="number" id="windLarge" step="any">
+    <div class="section">
+      <h2>FFU Specifications</h2>
+      <label for="ffuArea">FFU Area (m²):</label>
+      <input type="number" id="ffuArea" step="any">
+    </div>
     
-    <label for="ffuLarge">Number of FFUs:</label>
-    <input type="number" id="ffuLarge" step="1">
+    <div class="section">
+      <h2>Mixing Type</h2>
+      <input type="checkbox" id="optimalMixing" checked>
+      <label for="optimalMixing">Assume Optimal Mixing (full mixing between large and small rooms)</label>
+      <p>If unchecked, the calculator treats the small clean rooms as isolated, subtracting their volume from the large room's effective volume.</p>
+    </div>
+    
+    <button onclick="calculateACH()">Calculate ACH</button>
+    
+    <div id="results" style="margin-top:20px; font-weight: bold;"></div>
   </div>
-  
-  <div class="section">
-    <h2>Small Clean Room(s)</h2>
-    <p>Either enter the dimensions of the small clean rooms to calculate the volume automatically or the volume (m³) directly.</p>
-    <label for="lengthSmall">Length (m):</label>
-    <input type="number" id="lengthSmall" step="any" oninput="updateVolumeSmall()">
-    
-    <label for="widthSmall">Width (m):</label>
-    <input type="number" id="widthSmall" step="any" oninput="updateVolumeSmall()">
-    
-    <label for="heightSmall">Height (m):</label>
-    <input type="number" id="heightSmall" step="any" oninput="updateVolumeSmall()">
-
-    <label for="volSmall">Volume (m³) per small room:</label>
-    <input type="number" id="volSmall" step="any">
-    
-    <label for="ffuSmall">Number of FFUs (per small room):</label>
-    <input type="number" id="ffuSmall" step="1">
-    
-    <label for="numSmallRooms">Number of Small Clean Rooms:</label>
-    <input type="number" id="numSmallRooms" step="1" value="1">
-    
-    <!-- Dynamic windspeed inputs for each small room will appear here -->
-    <div id="smallRoomInputs"></div>
-  </div>
-  
-  <div class="section">
-    <h2>FFU Specifications</h2>
-    <label for="ffuArea">FFU Area (m²):</label>
-    <input type="number" id="ffuArea" step="any">
-  </div>
-  
-  <div class="section">
-    <h2>Mixing Type</h2>
-    <input type="checkbox" id="optimalMixing" checked>
-    <label for="optimalMixing">Assume Optimal Mixing (full mixing between large and small rooms)</label>
-    <p>If unchecked, the calculator treats the small clean rooms as isolated, subtracting their volume from the large room's effective volume.</p>
-  </div>
-  
-  <button onclick="calculateACH()">Calculate ACH</button>
-  
-  <div id="results" style="margin-top:20px; font-weight: bold;"></div>
-</div>
   
   <script>
     // Update large room volume if dimensions are provided
@@ -131,9 +125,11 @@
       var length = parseFloat(document.getElementById("lengthLarge").value);
       var width = parseFloat(document.getElementById("widthLarge").value);
       var height = parseFloat(document.getElementById("heightLarge").value);
-      if (!isNaN(length) && !isNaN(width) && !isNaN(height) && length > 0 && width > 0 && height > 0) {
+      if (!isNaN(length) && !isNaN(width) && !isNaN(height) &&
+          length > 0 && width > 0 && height > 0) {
         var volume = length * width * height;
         document.getElementById("volLarge").value = volume.toFixed(2);
+        localStorage.setItem("volLarge", volume.toFixed(2));
       }
     }
     
@@ -142,13 +138,15 @@
       var length = parseFloat(document.getElementById("lengthSmall").value);
       var width = parseFloat(document.getElementById("widthSmall").value);
       var height = parseFloat(document.getElementById("heightSmall").value);
-      if (!isNaN(length) && !isNaN(width) && !isNaN(height) && length > 0 && width > 0 && height > 0) {
+      if (!isNaN(length) && !isNaN(width) && !isNaN(height) &&
+          length > 0 && width > 0 && height > 0) {
         var volume = length * width * height;
         document.getElementById("volSmall").value = volume.toFixed(2);
+        localStorage.setItem("volSmall", volume.toFixed(2));
       }
     }
     
-    // Dynamically update windspeed inputs for small rooms based on number entered
+    // Dynamically update windspeed inputs for small rooms based on the number entered
     function updateSmallRoomInputs() {
       var numRooms = document.getElementById("numSmallRooms").value;
       var container = document.getElementById("smallRoomInputs");
@@ -160,13 +158,51 @@
         input.type = "number";
         input.step = "any";
         input.id = "windSmall_" + i;
+        // Load stored value if available
+        var storedWind = localStorage.getItem("windSmall_" + i);
+        if (storedWind !== null) {
+          input.value = storedWind;
+        }
+        // Save value on input
+        input.addEventListener("input", function() {
+          localStorage.setItem(this.id, this.value);
+        });
         container.appendChild(label);
         container.appendChild(input);
       }
     }
     
-    document.getElementById("numSmallRooms").addEventListener("input", updateSmallRoomInputs);
-    window.onload = updateSmallRoomInputs;
+    // Attach event listeners to save input values to local storage
+    function attachStorage(fieldId, isCheckbox = false) {
+      var el = document.getElementById(fieldId);
+      if (el) {
+        if (isCheckbox) {
+          el.addEventListener("change", function() {
+            localStorage.setItem(fieldId, el.checked);
+          });
+        } else {
+          el.addEventListener("input", function() {
+            localStorage.setItem(fieldId, el.value);
+          });
+        }
+      }
+    }
+    
+    // Load stored values from local storage
+    function loadStoredValues() {
+      var fieldIds = ["lengthLarge", "widthLarge", "heightLarge", "volLarge", "windLarge", "ffuLarge",
+                      "lengthSmall", "widthSmall", "heightSmall", "volSmall", "ffuSmall", "numSmallRooms", "ffuArea"];
+      fieldIds.forEach(function(id) {
+        var storedValue = localStorage.getItem(id);
+        if (storedValue !== null) {
+          document.getElementById(id).value = storedValue;
+        }
+      });
+      var optimalMixingStored = localStorage.getItem("optimalMixing");
+      if (optimalMixingStored !== null) {
+        document.getElementById("optimalMixing").checked = (optimalMixingStored === "true");
+      }
+    }
     
     function calculateACH() {
       // Get large room inputs
@@ -175,7 +211,8 @@
       var ffuLarge = parseFloat(document.getElementById("ffuLarge").value);
       var ffuArea = parseFloat(document.getElementById("ffuArea").value);
       
-      if(isNaN(volLarge) || isNaN(windLarge) || isNaN(ffuLarge) || isNaN(ffuArea) || volLarge <= 0) {
+      if (isNaN(volLarge) || isNaN(windLarge) || isNaN(ffuLarge) ||
+          isNaN(ffuArea) || volLarge <= 0) {
         alert("Please enter valid values for the large clean room and FFU area.");
         return;
       }
@@ -186,7 +223,7 @@
       // Get small room inputs
       var volSmall = parseFloat(document.getElementById("volSmall").value);
       var ffuSmall = parseFloat(document.getElementById("ffuSmall").value);
-      if(isNaN(volSmall) || isNaN(ffuSmall) || volSmall <= 0) {
+      if (isNaN(volSmall) || isNaN(ffuSmall) || volSmall <= 0) {
         alert("Please enter valid values for the small clean room and its FFUs.");
         return;
       }
@@ -197,15 +234,14 @@
       var resultsText = "<h3>Results:</h3>";
       var ACH_large, ACH_small;
       
-      if(optimalMixing) {
+      if (optimalMixing) {
         // Optimal mixing: full mixing; large room ACH is over the full volume
         ACH_large = Q_large / volLarge;
         resultsText += "<p>Large Clean Room ACH: " + ACH_large.toFixed(2) + "</p>";
-        
         // For each small room, add the large room's contribution
-        for(var i = 0; i < numRooms; i++){
+        for (var i = 0; i < numRooms; i++) {
           var windSmall = parseFloat(document.getElementById("windSmall_" + i).value);
-          if(isNaN(windSmall)) {
+          if (isNaN(windSmall)) {
             alert("Please enter a valid windspeed for small room " + (i + 1));
             return;
           }
@@ -217,17 +253,16 @@
         // Regular mixing: small rooms are isolated
         // Adjust large room effective volume: subtract the total volume of small clean rooms
         var effectiveVolLarge = volLarge - (numRooms * volSmall);
-        if(effectiveVolLarge <= 0) {
+        if (effectiveVolLarge <= 0) {
           alert("The total volume of the small clean rooms exceeds or equals the large room's volume. Please check your values.");
           return;
         }
         ACH_large = Q_large / effectiveVolLarge;
         resultsText += "<p>Large Clean Room ACH (effective): " + ACH_large.toFixed(2) + "</p>";
-        
         // For each small room, only use its own ventilation
-        for(var i = 0; i < numRooms; i++){
+        for (var i = 0; i < numRooms; i++) {
           var windSmall = parseFloat(document.getElementById("windSmall_" + i).value);
-          if(isNaN(windSmall)) {
+          if (isNaN(windSmall)) {
             alert("Please enter a valid windspeed for small room " + (i + 1));
             return;
           }
@@ -238,6 +273,20 @@
       }
       
       document.getElementById("results").innerHTML = resultsText;
+    }
+    
+    window.onload = function() {
+      loadStoredValues();
+      updateVolumeLarge();
+      updateVolumeSmall();
+      updateSmallRoomInputs();
+      var fields = ["lengthLarge", "widthLarge", "heightLarge", "volLarge", "windLarge", "ffuLarge",
+                    "lengthSmall", "widthSmall", "heightSmall", "volSmall", "ffuSmall", "numSmallRooms", "ffuArea"];
+      fields.forEach(function(fieldId) {
+        attachStorage(fieldId);
+      });
+      attachStorage("optimalMixing", true);
+      document.getElementById("numSmallRooms").addEventListener("input", updateSmallRoomInputs);
     }
   </script>
 </body>
